@@ -11,3 +11,9 @@ R
 "contracts/condition-assesment.clar,c/4/c4f08beb4bdec35f89807725094d1f4b5814c02b
 Q
 !tests/condition-assesment.test.ts,d/3/d312a3c85c940e52507fd8764390d1ff9e1650bc
+T
+$contracts/contractor-management.clar,3/c/3c7cee5de8ec22e7cff6f1b7129cb6e22bf92aaf
+N
+contracts/fund-allocation.clar,4/3/43407d338d293748c4e862305abc734e3555985c
+M
+tests/fund-allocation.test.ts,2/6/26b8bde75102b48c61abc472ec877a539a405ab7
