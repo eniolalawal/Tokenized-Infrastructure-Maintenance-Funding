@@ -1,30 +1,56 @@
+;; Condition Assessment Contract
+;; Tracks deterioration and maintenance needs
 
-;; title: condition-assesment
-;; version:
-;; summary:
-;; description:
+(define-map asset-conditions
+  { asset-id: uint }
+  {
+    condition-score: uint,
+    assessment-date: uint,
+    assessor: principal,
+    description: (string-ascii 200),
+    maintenance-required: bool
+  }
+)
 
-;; traits
-;;
+(define-public (record-assessment
+    (asset-id uint)
+    (condition-score uint)
+    (description (string-ascii 200))
+    (maintenance-required bool))
+  (begin
+    (asserts! (<= condition-score u10) (err u1))
+    (map-set asset-conditions
+      { asset-id: asset-id }
+      {
+        condition-score: condition-score,
+        assessment-date: block-height,
+        assessor: tx-sender,
+        description: description,
+        maintenance-required: maintenance-required
+      }
+    )
+    (ok true)
+  )
+)
 
-;; token definitions
-;;
+(define-read-only (get-condition (asset-id uint))
+  (map-get? asset-conditions { asset-id: asset-id })
+)
 
-;; constants
-;;
+(define-read-only (needs-maintenance (asset-id uint))
+  (let ((condition (map-get? asset-conditions { asset-id: asset-id })))
+    (if (is-some condition)
+      (get maintenance-required (unwrap-panic condition))
+      false
+    )
+  )
+)
 
-;; data vars
-;;
-
-;; data maps
-;;
-
-;; public functions
-;;
-
-;; read only functions
-;;
-
-;; private functions
-;;
-
+(define-read-only (get-condition-score (asset-id uint))
+  (let ((condition (map-get? asset-conditions { asset-id: asset-id })))
+    (if (is-some condition)
+      (some (get condition-score (unwrap-panic condition)))
+      none
+    )
+  )
+)
